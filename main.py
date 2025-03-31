@@ -66,6 +66,22 @@ def save():
             password_input.delete(0, "end")
             website_input.focus()
 
+# Search account
+def find_password():
+    try:
+        with open("data.json", "r") as data_file:
+            data = json.load(data_file)
+    except FileNotFoundError as error_message:
+        messagebox.showerror(title="Error", message="File Not Found")
+    else:
+        try:
+            search_object = website_input.get()
+            print(data.get(search_object))
+            seach_result = data.get(search_object)
+            messagebox.showinfo(title=search_object, message=f"Email: {seach_result.get("email")} \n Password: {seach_result.get("password")}")
+        except AttributeError:
+            messagebox.showerror(title="Error", message=f"No details fo the {search_object} exists")
+
 
 # ---------------------------- UI SETUP ------------------------------- #
 
@@ -81,10 +97,13 @@ canvas.grid(row=0, column=1)
 # Website
 website_text = Label(text="Website")
 website_text.grid(row=1, column=0)
-website_input = Entry()
+website_input = Entry(width=35)
 website_input.focus()
-website_input.grid(row=1, column=1, columnspan=2, sticky="EW")
+website_input.grid(row=1, column=1)
 
+# Search button
+search_button = Button(text="Search", command=find_password, width=14)
+search_button.grid(row=1, column=2)
 # Email/Username
 email_user_text = Label(text="Email/Username:")
 email_user_text.grid(row=2, column=0)
